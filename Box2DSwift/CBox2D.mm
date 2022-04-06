@@ -60,6 +60,8 @@ public:
     bool ballHitBrick;
     bool ballLaunched;
     bool ballHitWall;
+    int last_move;
+    int player_speed;
 }
 @end
 
@@ -141,6 +143,8 @@ public:
         ballHitBrick = false;
         ballLaunched = false;
         ballHitWall = false;
+        last_move = 0;
+        player_speed = 12;
     }
     return self;
 }
@@ -269,8 +273,23 @@ public:
 
 -(void)movePlayer:(float)movement
 {
+    if (abs(movement) < 1)
+    {
+        last_move = 0;
+    }
+    
     int cur_pos = thePlayer->GetPosition().x;
-    thePlayer->SetTransform(b2Vec2(cur_pos + movement/3, Player_POS_Y), 0.0f);
+    
+    if (movement-last_move > 0)
+    {
+       thePlayer->SetTransform(b2Vec2(cur_pos + player_speed, Player_POS_Y), 0.0f);
+    } else if (movement-last_move < 0)
+    {
+        thePlayer->SetTransform(b2Vec2(cur_pos - player_speed, Player_POS_Y), 0.0f);
+    }
+    
+    last_move = movement;
+    
 }
 
 -(void *)GetObjectPositions

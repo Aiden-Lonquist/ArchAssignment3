@@ -50,7 +50,9 @@ class ViewController: GLKViewController {
     }
     
     @objc func doSingleFingerPan(_ sender: UIPanGestureRecognizer) {
+        
         glesRenderer.box2d.movePlayer(Float(sender.translation(in: view).x))
+        
     }
 
 }
