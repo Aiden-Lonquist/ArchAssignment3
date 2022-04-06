@@ -10,7 +10,7 @@
 // Some Box2D engine paremeters
 const float MAX_TIMESTEP = 1.0f/60.0f;
 const int NUM_VEL_ITERATIONS = 50;
-const int NUM_POS_ITERATIONS = 10;
+const int NUM_POS_ITERATIONS = 20;
 int cur_velocity_y = BALL_VELOCITY;
 int cur_velocity_x = 0;
 
@@ -84,7 +84,7 @@ public:
         
         // Set up the brick and ball objects for Box2D
         b2BodyDef brickBodyDef;
-        brickBodyDef.type = b2_dynamicBody;
+        brickBodyDef.type = b2_staticBody;
         brickBodyDef.position.Set(BRICK_POS_X, BRICK_POS_Y);
         theBrick = world->CreateBody(&brickBodyDef);
         if (theBrick)
@@ -119,7 +119,7 @@ public:
                 theBall->CreateFixture(&circleFixtureDef);
                 
                 b2BodyDef playerBodyDef;
-                playerBodyDef.type = b2_dynamicBody;
+                playerBodyDef.type = b2_staticBody;
                 playerBodyDef.position.Set(Player_POS_X, Player_POS_Y);
                 thePlayer = world->CreateBody(&playerBodyDef);
                 if (thePlayer)
@@ -182,8 +182,6 @@ public:
         cur_velocity_x = ((rand() % 10) - 0.5) * 20000;
         theBall->SetLinearVelocity(b2Vec2(cur_velocity_x, cur_velocity_y));
         theBall->SetAngularVelocity(0);
-        theBrick->SetLinearVelocity(b2Vec2(cur_velocity_x, 0));
-        thePlayer->SetLinearVelocity(b2Vec2(0, 0));
         //theBall->SetActive(false);
         //world->DestroyBody(theBrick);
         //theBrick = NULL;
@@ -195,7 +193,6 @@ public:
     {
         cur_velocity_x = abs(cur_velocity_x) * -1;
         theBall->SetLinearVelocity(b2Vec2(cur_velocity_x, cur_velocity_y));
-        theBrick->SetLinearVelocity(b2Vec2(cur_velocity_x, 0));
     }
     
     //ball hits left wall
@@ -203,7 +200,6 @@ public:
     {
         cur_velocity_x = abs(cur_velocity_x);
         theBall->SetLinearVelocity(b2Vec2(cur_velocity_x, cur_velocity_y));
-        theBrick->SetLinearVelocity(b2Vec2(cur_velocity_x, 0));
     }
     
     //AI scores
@@ -214,11 +210,9 @@ public:
         theBall->SetTransform(b2Vec2(BALL_POS_X, BALL_POS_Y), 0.0f);
         
         //reset brick POS
-        theBrick->SetLinearVelocity(b2Vec2(0, 0));
         theBrick->SetTransform(b2Vec2(BRICK_POS_X, BRICK_POS_Y), 0.0f);
         
         //reset player POS
-        thePlayer->SetLinearVelocity(b2Vec2(0, 0));
         thePlayer->SetTransform(b2Vec2(Player_POS_X, Player_POS_Y), 0.0f);
         
     }
@@ -231,13 +225,17 @@ public:
         theBall->SetTransform(b2Vec2(BALL_POS_X, BALL_POS_Y), 0.0f);
         
         //reset brick POS
-        theBrick->SetLinearVelocity(b2Vec2(0, 0));
         theBrick->SetTransform(b2Vec2(BRICK_POS_X, BRICK_POS_Y), 0.0f);
         
         //reset player POS
-        thePlayer->SetLinearVelocity(b2Vec2(0, 0));
         thePlayer->SetTransform(b2Vec2(Player_POS_X, Player_POS_Y), 0.0f);
         
+    }
+    
+    if (!ballHitBrick)
+    {
+        int cur_pos = theBall->GetPosition().x;
+        theBrick->SetTransform(b2Vec2(cur_pos, BRICK_POS_Y), 0.0f);
     }
     
     
