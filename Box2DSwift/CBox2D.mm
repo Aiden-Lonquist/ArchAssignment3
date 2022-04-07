@@ -62,6 +62,8 @@ public:
     bool ballHitWall;
     int last_move;
     int player_speed;
+    int player_score;
+    int AI_score;
 }
 @end
 
@@ -145,6 +147,8 @@ public:
         ballHitWall = false;
         last_move = 0;
         player_speed = 12;
+        player_score = 0;
+        AI_score = 0;
     }
     return self;
 }
@@ -219,6 +223,8 @@ public:
         //reset player POS
         thePlayer->SetTransform(b2Vec2(Player_POS_X, Player_POS_Y), 0.0f);
         
+        AI_score += 1;
+        
     }
     
     //player scores
@@ -233,6 +239,8 @@ public:
         
         //reset player POS
         thePlayer->SetTransform(b2Vec2(Player_POS_X, Player_POS_Y), 0.0f);
+        
+        player_score += 1;
         
     }
     
@@ -289,7 +297,16 @@ public:
     }
     
     last_move = movement;
-    
+}
+
+-(int)GetPlayerScore
+{
+    return(player_score);
+}
+
+-(int)GetAIScore
+{
+    return(AI_score);
 }
 
 -(void *)GetObjectPositions
